@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tribe Fashion - Admin Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #ffffff;
+            color: #2d3748;
+            overflow-x: hidden;
+        }
+
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #9066ce 0%, #8055c4 100%);
+            color: white;
+            padding: 0;
+            box-shadow: 4px 0 20px rgba(144, 102, 206, 0.15);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            padding: 30px 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-header p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            font-weight: 400;
+        }
+
+        .nav-menu {
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 25px;
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+            font-weight: 500;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-left-color: #d452c3;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-item svg {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            fill: currentColor;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            background: #f8fafc;
+            min-height: 100vh;
+        }
+
+        .top-bar {
+            background: white;
+            padding: 20px 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .page-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #d452c3;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #d452c3, #9066ce);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .content-area {
+            padding: 30px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(212, 82, 195, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(212, 82, 195, 0.15);
+        }
+
+        .stat-card h3 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #d452c3;
+            margin-bottom: 8px;
+        }
+
+        .stat-card p {
+            color: #718096;
+            font-weight: 500;
+            font-size: 1rem;
+        }
+
+        .stat-card .trend {
+            font-size: 0.85rem;
+            color: #38a169;
+            margin-top: 8px;
+            font-weight: 600;
+        }
+
+        .panels-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .panel {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+            border: 1px solid rgba(212, 82, 195, 0.08);
+        }
+
+        .panel-header {
+            background: linear-gradient(135deg, #d452c3, #9066ce);
+            color: white;
+            padding: 20px 25px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-content {
+            padding: 25px;
+        }
+
+        .product-item, .message-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .product-item:last-child, .message-item:last-child {
+            border-bottom: none;
+        }
+
+        .product-info h4, .message-info h4 {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 4px;
+        }
+
+        .product-info p, .message-info p {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+
+        .product-price {
+            font-weight: 700;
+            color: #d452c3;
+            font-size: 1.1rem;
+        }
+
+        .message-time {
+            color: #a0aec0;
+            font-size: 0.85rem;
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, #d452c3, #9066ce);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: linear-gradient(135deg, #c244b3, #8055c4);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(212, 82, 195, 0.3);
+        }
+
+        .add-btn {
+            background: #38a169;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .add-btn:hover {
+            background: #2f855a;
+            transform: translateY(-1px);
+        }
+
+        .quick-actions {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(212, 82, 195, 0.08);
+        }
+
+        .quick-actions h3 {
+            color: #d452c3;
+            font-weight: 600;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .quick-action-btn {
+            background: linear-gradient(135deg, rgba(212, 82, 195, 0.1), rgba(144, 102, 206, 0.1));
+            border: 2px solid rgba(212, 82, 195, 0.2);
+            color: #d452c3;
+            padding: 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .quick-action-btn:hover {
+            background: linear-gradient(135deg, #d452c3, #9066ce);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 82, 195, 0.25);
+        }
+
+        @media (max-width: 1024px) {
+            .panels-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .top-bar {
+                padding: 15px 20px;
+            }
+            
+            .content-area {
+                padding: 20px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h1>Tribe Fashion</h1>
+                <p>Admin Dashboard</p>
+            </div>
+            <div class="nav-menu">
+                <a href="#" class="nav-item active" onclick="showSection('dashboard')">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+                    </svg>
+                    Dashboard
+                </a>
+                <a href="#" class="nav-item" onclick="showSection('products')">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12L8.1 13h7.45c.75 0 1.41-.41 1.75-1.03L21.7 4H5.21l-.94-2H1zm16 16c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+                    </svg>
+                    Products
+                </a>
+                <a href="#" class="nav-item" onclick="showSection('messages')">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
+                    </svg>
+                    Messages
+                </a>
+                <a href="#" class="nav-item" onclick="showMessage('Orders section would load here')">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                    </svg>
+                    Orders
+                </a>
+                <a href="#" class="nav-item" onclick="showMessage('Analytics section would load here')">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/>
+                    </svg>
+                    Analytics
+                </a>
+                <a href="#" class="nav-item" onclick="showMessage('Settings panel would open here')">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.82,11.69,4.82,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
+                    </svg>
+                    Settings
+                </a>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <div class="top-bar">
+                <h1 class="page-title" id="pageTitle">Dashboard Overview</h1>
+                <div class="user-info">
+                    <span>Welcome, Admin</span>
+                    <div class="user-avatar">A</div>
+                </div>
+            </div>
+
+            <div class="content-area">
+                <div id="dashboardSection">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3>1,247</h3>
+                            <p>Total Products</p>
+                            <div class="trend">↗ +12% this month</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>89</h3>
+                            <p>New Messages</p>
+                            <div class="trend">↗ +5% this week</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>$24,580</h3>
+                            <p>Monthly Revenue</p>
+                            <div class="trend">↗ +18% this month</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>456</h3>
+                            <p>Active Orders</p>
+                            <div class="trend">↗ +8% this week</div>
+                        </div>
+                    </div>
+
+                    <div class="panels-grid">
+                        <div class="panel">
+                            <div class="panel-header">
+                                <span>Recent Products</span>
+                                <button class="add-btn" onclick="showMessage('Add new product form would open here')">Add New</button>
+                            </div>
+                            <div class="panel-content">
+                                <div class="product-item">
+                                    <div class="product-info">
+                                        <h4>Summer Floral Dress</h4>
+                                        <p>SKU: TF-2024-001</p>
+                                    </div>
+                                    <div>
+                                        <div class="product-price">$89.99</div>
+                                        <button class="action-btn" onclick="showMessage('Product edit form would open')">Edit</button>
+                                    </div>
+                                </div>
+                                <div class="product-item">
+                                    <div class="product-info">
+                                        <h4>Casual Denim Jacket</h4>
+                                        <p>SKU: TF-2024-002</p>
+                                    </div>
+                                    <div>
+                                        <div class="product-price">$124.99</div>
+                                        <button class="action-btn" onclick="showMessage('Product edit form would open')">Edit</button>
+                                    </div>
+                                </div>
+                                <div class="product-item">
+                                    <div class="product-info">
+                                        <h4>Elegant Evening Gown</h4>
+                                        <p>SKU: TF-2024-003</p>
+                                    </div>
+                                    <div>
+                                        <div class="product-price">$299.99</div>
+                                        <button class="action-btn" onclick="showMessage('Product edit form would open')">Edit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel">
+                            <div class="panel-header">
+                                <span>Recent Messages</span>
+                                <button class="add-btn" onclick="showMessage('Message compose window would open')">Reply All</button>
+                            </div>
+                            <div class="panel-content">
+                                <div class="message-item">
+                                    <div class="message-info">
+                                        <h4>Sarah Johnson</h4>
+                                        <p>Question about size availability...</p>
+                                    </div>
+                                    <div>
+                                        <div class="message-time">2 hours ago</div>
+                                        <button class="action-btn" onclick="showMessage('Message reply window would open')">Reply</button>
+                                    </div>
+                                </div>
+                                <div class="message-item">
+                                    <div class="message-info">
+                                        <h4>Mike Chen</h4>
+                                        <p>Shipping inquiry for order #1234...</p>
+                                    </div>
+                                    <div>
+                                        <div class="message-time">4 hours ago</div>
+                                        <button class="action-btn" onclick="showMessage('Message reply window would open')">Reply</button>
+                                    </div>
+                                </div>
+                                <div class="message-item">
+                                    <div class="message-info">
+                                        <h4>Emma Davis</h4>
+                                        <p>Return request for recent purchase...</p>
+                                    </div>
+                                    <div>
+                                        <div class="message-time">6 hours ago</div>
+                                        <button class="action-btn" onclick="showMessage('Message reply window would open')">Reply</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quick-actions">
+                        <h3>Quick Actions</h3>
+                        <div class="actions-grid">
+                            <button class="quick-action-btn" onclick="showMessage('Bulk product upload tool would open')">
+                                Bulk Upload Products
+                            </button>
+                            <button class="quick-action-btn" onclick="showMessage('Inventory management panel would open')">
+                                Manage Inventory
+                            </button>
+                            <button class="quick-action-btn" onclick="showMessage('Customer support dashboard would open')">
+                                Customer Support
+                            </button>
+                            <button class="quick-action-btn" onclick="showMessage('Sales report generator would open')">
+                                Generate Reports
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="productsSection" style="display: none;">
+                    <div class="panel">
+                        <div class="panel-header">
+                            <span>Product Management</span>
+                            <button class="add-btn" onclick="showMessage('New product creation form would open')">Add Product</button>
+                        </div>
+                        <div class="panel-content">
+                            <div class="product-item">
+                                <div class="product-info">
+                                    <h4>Bohemian Maxi Dress</h4>
+                                    <p>Category: Dresses | Stock: 45 units</p>
+                                </div>
+                                <div>
+                                    <div class="product-price">$156.99</div>
+                                    <button class="action-btn" onclick="showMessage('Product details would load')">Manage</button>
+                                </div>
+                            </div>
+                            <div class="product-item">
+                                <div class="product-info">
+                                    <h4>Vintage Leather Boots</h4>
+                                    <p>Category: Footwear | Stock: 23 units</p>
+                                </div>
+                                <div>
+                                    <div class="product-price">$189.99</div>
+                                    <button class="action-btn" onclick="showMessage('Product details would load')">Manage</button>
+                                </div>
+                            </div>
+                            <div class="product-item">
+                                <div class="product-info">
+                                    <h4>Silk Scarf Collection</h4>
+                                    <p>Category: Accessories | Stock: 67 units</p>
+                                </div>
+                                <div>
+                                    <div class="product-price">$79.99</div>
+                                    <button class="action-btn" onclick="showMessage('Product details would load')">Manage</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="messagesSection" style="display: none;">
+                    <div class="panel">
+                        <div class="panel-header">
+                            <span>Message Center</span>
+                            <button class="add-btn" onclick="showMessage('Compose new message window would open')">Compose</button>
+                        </div>
+                        <div class="panel-content">
+                            <div class="message-item">
+                                <div class="message-info">
+                                    <h4>Lisa Rodriguez</h4>
+                                    <p>Love the new collection! When will the spring items be available?</p>
+                                </div>
+                                <div>
+                                    <div class="message-time">1 hour ago</div>
+                                    <button class="action-btn" onclick="showMessage('Message thread would open')">View</button>
+                                </div>
+                            </div>
+                            <div class="message-item">
+                                <div class="message-info">
+                                    <h4>James Wilson</h4>
+                                    <p>Issue with my recent order - item arrived damaged</p>
+                                </div>
+                                <div>
+                                    <div class="message-time">3 hours ago</div>
+                                    <button class="action-btn" onclick="showMessage('Message thread would open')">View</button>
+                                </div>
+                            </div>
+                            <div class="message-item">
+                                <div class="message-info">
+                                    <h4>Anna Thompson</h4>
+                                    <p>Requesting size exchange for order #5678</p>
+                                </div>
+                                <div>
+                                    <div class="message-time">5 hours ago</div>
+                                    <button class="action-btn" onclick="showMessage('Message thread would open')">View</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function showSection(section) {
+            // Hide all sections
+            document.getElementById('dashboardSection').style.display = 'none';
+            document.getElementById('productsSection').style.display = 'none';
+            document.getElementById('messagesSection').style.display = 'none';
+            
+            // Remove active class from all nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Show selected section and update title
+            if (section === 'dashboard') {
+                document.getElementById('dashboardSection').style.display = 'block';
+                document.getElementById('pageTitle').textContent = 'Dashboard Overview';
+            } else if (section === 'products') {
+                document.getElementById('productsSection').style.display = 'block';
+                document.getElementById('pageTitle').textContent = 'Product Management';
+            } else if (section === 'messages') {
+                document.getElementById('messagesSection').style.display = 'block';
+                document.getElementById('pageTitle').textContent = 'Message Center';
+            }
+            
+            // Add active class to clicked nav item
+            event.target.classList.add('active');
+        }
+
+        function showMessage(message) {
+            const messageDiv = document.createElement('div');
+            messageDiv.style.cssText = `
+                position: fixed;
+                top: 30px;
+                right: 30px;
+                background: linear-gradient(135deg, #d452c3, #9066ce);
+                color: white;
+                padding: 16px 24px;
+                border-radius: 12px;
+                font-family: 'Inter', sans-serif;
+                font-weight: 500;
+                font-size: 0.95rem;
+                box-shadow: 0 8px 25px rgba(212, 82, 195, 0.3);
+                z-index: 2000;
+                animation: slideIn 0.4s ease;
+                max-width: 350px;
+                backdrop-filter: blur(10px);
+            `;
+            messageDiv.textContent = message;
+            
+            if (!document.querySelector('#messageAnimation')) {
+                const style = document.createElement('style');
+                style.id = 'messageAnimation';
+                style.textContent = `
+                    @keyframes slideIn {
+                        from { 
+                            transform: translateX(100%) translateY(-10px); 
+                            opacity: 0; 
+                        }
+                        to { 
+                            transform: translateX(0) translateY(0); 
+                            opacity: 1; 
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            document.body.appendChild(messageDiv);
+            
+            setTimeout(() => {
+                messageDiv.style.animation = 'slideIn 0.4s ease reverse';
+                setTimeout(() => messageDiv.remove(), 400);
+            }, 3500);
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'979652c8253949a6',t:'MTc1NjkxMzc5My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

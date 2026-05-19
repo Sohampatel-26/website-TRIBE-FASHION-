@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tribe Fashion - Add New Product</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #ffffff;
+            color: #2d3748;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #9066ce 0%, #8055c4 100%);
+            padding: 25px 0;
+            box-shadow: 0 4px 20px rgba(144, 102, 206, 0.2);
+            position: relative;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #d452c3, transparent);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .breadcrumb {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .breadcrumb a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb a:hover {
+            color: white;
+        }
+
+        .main-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 50px 30px;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .page-title h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 12px;
+            position: relative;
+        }
+
+        .page-title h1::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, #9066ce, #d452c3);
+            border-radius: 2px;
+        }
+
+        .page-title p {
+            color: #718096;
+            font-size: 1.1rem;
+            font-weight: 400;
+            margin-top: 20px;
+        }
+
+        .form-container {
+            background: white;
+            border-radius: 24px;
+            padding: 50px 45px;
+            box-shadow: 
+                0 20px 60px rgba(144, 102, 206, 0.08),
+                0 8px 25px rgba(212, 82, 195, 0.06);
+            border: 2px solid transparent;
+            background-clip: padding-box;
+            position: relative;
+        }
+
+        .form-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 24px;
+            padding: 2px;
+            background: linear-gradient(135deg, #d452c3, #9066ce, #d452c3);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: exclude;
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 12px;
+            color: #4a5568;
+            font-weight: 600;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            letter-spacing: 0.3px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 18px 22px;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+            color: #2d3748;
+            font-weight: 500;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #d452c3;
+            background: #ffffff;
+            box-shadow: 
+                0 0 0 4px rgba(212, 82, 195, 0.1),
+                0 4px 20px rgba(212, 82, 195, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #a0aec0;
+            font-style: italic;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .price-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .file-upload {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-upload input[type="file"] {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-upload-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            border: 2px dashed #d452c3;
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(212, 82, 195, 0.05), rgba(144, 102, 206, 0.05));
+            color: #d452c3;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .file-upload-label:hover {
+            background: linear-gradient(135deg, rgba(212, 82, 195, 0.1), rgba(144, 102, 206, 0.1));
+            border-color: #9066ce;
+            transform: translateY(-2px);
+        }
+
+        .file-upload-icon {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 8px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #d452c3;
+            cursor: pointer;
+        }
+
+        .checkbox-group label {
+            margin: 0;
+            cursor: pointer;
+            font-weight: 500;
+            color: #4a5568;
+        }
+
+        .submit-section {
+            margin-top: 50px;
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #9066ce 0%, #d452c3 100%);
+            color: white;
+            border: none;
+            padding: 20px 50px;
+            border-radius: 16px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            box-shadow: 0 8px 30px rgba(212, 82, 195, 0.3);
+            position: relative;
+            overflow: hidden;
+            min-width: 250px;
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(135deg, #8055c4 0%, #c244b3 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(212, 82, 195, 0.4);
+        }
+
+        .submit-btn:hover::before {
+            left: 100%;
+        }
+
+        .submit-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .cancel-btn {
+            background: transparent;
+            color: #718096;
+            border: 2px solid #e2e8f0;
+            padding: 18px 40px;
+            border-radius: 16px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 20px;
+        }
+
+        .cancel-btn:hover {
+            border-color: #d452c3;
+            color: #d452c3;
+            background: rgba(212, 82, 195, 0.05);
+        }
+
+        .form-section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #d452c3;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(212, 82, 195, 0.1);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 60px;
+            height: 2px;
+            background: #d452c3;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .price-group {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-container {
+                padding: 35px 25px;
+                margin: 20px;
+            }
+            
+            .main-container {
+                padding: 30px 20px;
+            }
+            
+            .page-title h1 {
+                font-size: 2rem;
+            }
+            
+            .submit-btn {
+                padding: 18px 40px;
+                font-size: 1.1rem;
+                min-width: 200px;
+            }
+            
+            .cancel-btn {
+                margin-right: 0;
+                margin-bottom: 15px;
+                display: block;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">Tribe Fashion</div>
+            <div class="breadcrumb">
+                <a href="#" onclick="showMessage('Dashboard would load here')">Dashboard</a> / 
+                <a href="#" onclick="showMessage('Products page would load here')">Products</a> / 
+                Add New Product
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="page-title">
+            <h1>Add New Product</h1>
+            <p>Create a beautiful new addition to your fashion collection</p>
+        </div>
+
+        <div class="form-container">
+            <form id="productForm">
+                <div class="form-section">
+                    <h3 class="section-title">Basic Information</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="productName">Product Name</label>
+                            <input type="text" id="productName" name="productName" placeholder="Enter product name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="sku">SKU Code</label>
+                            <input type="text" id="sku" name="sku" placeholder="e.g., TF-2024-001" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="category">Category</label>
+                            <select id="category" name="category" required>
+                                <option value="">Select category</option>
+                                <option value="dresses">Dresses</option>
+                                <option value="tops">Tops & Blouses</option>
+                                <option value="bottoms">Bottoms</option>
+                                <option value="outerwear">Outerwear</option>
+                                <option value="accessories">Accessories</option>
+                                <option value="footwear">Footwear</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="brand">Brand</label>
+                            <input type="text" id="brand" name="brand" placeholder="Enter brand name">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label for="description">Product Description</label>
+                        <textarea id="description" name="description" placeholder="Describe your product in detail - materials, fit, styling tips..." required></textarea>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3 class="section-title">Pricing & Inventory</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="price">Regular Price ($)</label>
+                            <input type="number" id="price" name="price" placeholder="0.00" step="0.01" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="salePrice">Sale Price ($)</label>
+                            <input type="number" id="salePrice" name="salePrice" placeholder="0.00" step="0.01" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="stock">Stock Quantity</label>
+                            <input type="number" id="stock" name="stock" placeholder="0" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight (lbs)</label>
+                            <input type="number" id="weight" name="weight" placeholder="0.0" step="0.1" min="0">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3 class="section-title">Product Details</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="color">Primary Color</label>
+                            <input type="text" id="color" name="color" placeholder="e.g., Navy Blue, Rose Gold">
+                        </div>
+                        <div class="form-group">
+                            <label for="material">Material</label>
+                            <input type="text" id="material" name="material" placeholder="e.g., 100% Cotton, Silk Blend">
+                        </div>
+                        <div class="form-group">
+                            <label for="sizes">Available Sizes</label>
+                            <input type="text" id="sizes" name="sizes" placeholder="e.g., XS, S, M, L, XL">
+                        </div>
+                        <div class="form-group">
+                            <label for="season">Season</label>
+                            <select id="season" name="season">
+                                <option value="">Select season</option>
+                                <option value="spring">Spring</option>
+                                <option value="summer">Summer</option>
+                                <option value="fall">Fall</option>
+                                <option value="winter">Winter</option>
+                                <option value="all-season">All Season</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3 class="section-title">Product Images</h3>
+                    <div class="form-group full-width">
+                        <label for="images">Upload Product Images</label>
+                        <div class="file-upload">
+                            <input type="file" id="images" name="images" multiple accept="image/*">
+                            <label for="images" class="file-upload-label">
+                                <svg class="file-upload-icon" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+                                </svg>
+                                <div>
+                                    <strong>Click to upload images</strong>
+                                    <br>
+                                    <span style="font-size: 0.9rem; opacity: 0.8;">PNG, JPG up to 10MB each</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3 class="section-title">Settings</h3>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="featured" name="featured">
+                        <label for="featured">Mark as featured product</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="active" name="active" checked>
+                        <label for="active">Product is active and visible</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="newsletter" name="newsletter">
+                        <label for="newsletter">Include in newsletter promotions</label>
+                    </div>
+                </div>
+
+                <div class="submit-section">
+                    <button type="button" class="cancel-btn" onclick="showMessage('Changes discarded. Returning to products page...')">Cancel</button>
+                    <button type="submit" class="submit-btn">Create Product</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('productForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const productName = document.getElementById('productName').value;
+            const sku = document.getElementById('sku').value;
+            const category = document.getElementById('category').value;
+            const price = document.getElementById('price').value;
+            
+            if (productName && sku && category && price) {
+                showMessage('🎉 Product "' + productName + '" has been successfully created and added to your catalog!', 'success');
+                
+                // Reset form after successful submission
+                setTimeout(() => {
+                    document.getElementById('productForm').reset();
+                }, 2000);
+            } else {
+                showMessage('Please fill in all required fields to create the product.', 'error');
+            }
+        });
+
+        // Auto-generate SKU based on product name
+        document.getElementById('productName').addEventListener('input', function(e) {
+            const productName = e.target.value;
+            const skuField = document.getElementById('sku');
+            
+            if (productName && !skuField.value) {
+                const sku = 'TF-2024-' + productName.substring(0, 3).toUpperCase() + Math.floor(Math.random() * 1000);
+                skuField.value = sku;
+            }
+        });
+
+        // File upload feedback
+        document.getElementById('images').addEventListener('change', function(e) {
+            const files = e.target.files;
+            const label = document.querySelector('.file-upload-label');
+            
+            if (files.length > 0) {
+                label.innerHTML = `
+                    <svg class="file-upload-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M9,16.17L4.83,12l-1.42,1.41L9,19L21,7l-1.41-1.41Z"/>
+                    </svg>
+                    <div>
+                        <strong>${files.length} image(s) selected</strong>
+                        <br>
+                        <span style="font-size: 0.9rem; opacity: 0.8;">Ready to upload</span>
+                    </div>
+                `;
+                label.style.borderColor = '#38a169';
+                label.style.color = '#38a169';
+            }
+        });
+
+        function showMessage(message, type = 'success') {
+            const messageDiv = document.createElement('div');
+            const bgGradient = type === 'success' 
+                ? 'linear-gradient(135deg, #38a169, #48bb78)' 
+                : 'linear-gradient(135deg, #e53e3e, #fc8181)';
+            
+            messageDiv.style.cssText = `
+                position: fixed;
+                top: 30px;
+                right: 30px;
+                background: ${bgGradient};
+                color: white;
+                padding: 18px 28px;
+                border-radius: 16px;
+                font-family: 'Inter', sans-serif;
+                font-weight: 600;
+                font-size: 1rem;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+                z-index: 2000;
+                animation: slideIn 0.5s ease;
+                max-width: 400px;
+                backdrop-filter: blur(10px);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+            `;
+            messageDiv.textContent = message;
+            
+            if (!document.querySelector('#messageAnimation')) {
+                const style = document.createElement('style');
+                style.id = 'messageAnimation';
+                style.textContent = `
+                    @keyframes slideIn {
+                        from { 
+                            transform: translateX(100%) translateY(-10px); 
+                            opacity: 0; 
+                            scale: 0.9;
+                        }
+                        to { 
+                            transform: translateX(0) translateY(0); 
+                            opacity: 1; 
+                            scale: 1;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            document.body.appendChild(messageDiv);
+            
+            setTimeout(() => {
+                messageDiv.style.animation = 'slideIn 0.5s ease reverse';
+                setTimeout(() => messageDiv.remove(), 500);
+            }, 4000);
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97965af1701849a6',t:'MTc1NjkxNDEyNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
